@@ -1,1 +1,47 @@
-# lineselect
+# Line Select
+
+Elevate your command-line pipelines using the Interactive Line Selector – a potent utility enabling interactive line selection from stdin. Seamlessly integrate, pause, select, and refine your pipeline, enhancing data processing precision.
+
+# Features
+- Interactive Selection: Pause the pipeline's execution to manually select specific lines from the input stream.
+- Seamless Integration: Easily integrate the Interactive Line Selector into your existing command-line pipelines.
+- Optimized Workflow: Curate data on-the-fly for more accurate and meaningful results.
+
+# Usage
+
+Incorporate the Interactive Line Selector into your pipeline:
+
+```bash
+<command producing input> | lineselect | <subsequent command>
+```
+
+Use arrow keys to navigate, press `Space` to select/deselect lines, and press `Enter` to proceed with the selected lines.
+
+# Example
+
+Imagine you have a list of files in a directory and you want to selectively remove them using `rm`. Instead of using a complex find command, you can utilize the Interactive Line Selector to streamline the process:
+
+```
+ls | lineselect | xargs rm
+```
+
+# Installation
+
+# Contributions
+
+Contributions are welcome! If you have ideas for improvements or new features, please feel free to submit a pull request.
+
+# Acknowledgments
+
+This project builds upon the fantastic work of the following projects:
+
+- [Clap](https://github.com/clap-rs/clap) - A full featured, fast Command Line Argument Parser for Rust.
+-  [Dialoguer](https://github.com/console-rs/dialoguer) - Rust utility library for nice command line prompts and similar things.
+
+## Previous Implementation
+
+This idea has been implemented before by [chfritz/lineselect](https://github.com/chfritz/lineselect) using JavaScript. Our project aims to provide an option in Rust with a single binary.
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
