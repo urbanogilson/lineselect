@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 clap = "4.3.11"
+dialoguer = "0.10.4"
