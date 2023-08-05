@@ -27,6 +27,13 @@ ls | <b>lineselect</b> | xargs rm
 
 # Installation
 
+## Debian
+
+```bash
+wget https://github.com/urbanogilson/lineselect/releases/download/v0.1.0/lineselect_0.1.0_amd64.deb
+apt install ./lineselect_0.1.0_amd64.deb
+```
+
 # Contributions
 
 Contributions are welcome! If you have ideas for improvements or new features, please feel free to submit a pull request.
