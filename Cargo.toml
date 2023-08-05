@@ -10,4 +10,5 @@ repository = "https://github.com/urbanogilson/lineselect"
 
 [dependencies]
 clap = "4.3.11"
+colored = "2.0.4"
 dialoguer = "0.10.4"

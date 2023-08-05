@@ -1,9 +1,16 @@
 use clap::Command;
-use dialoguer::{console::Term, theme::ColorfulTheme, MultiSelect};
+use colored::Colorize;
+use dialoguer::{console::Term, theme::SimpleTheme, MultiSelect};
 use std::io;
 
 fn cmd() -> clap::Command {
-    Command::new("lineselect")
+    let name = "lineselect";
+
+    Command::new(name)
+        .override_usage(format!(
+            "<command producing input> | {} | <subsequent command>",
+            name.bold()
+        ))
         .version("0.1.0")
         .author("Gilson Urbano <me@gilsonurbano.com>")
         .about("Select lines")
@@ -44,28 +51,25 @@ fn test_read_lines() {
     assert_eq!(lines[2], "Line 3");
 }
 
-fn main() -> std::io::Result<()> {
+fn main() {
     cmd().get_matches();
 
     let stdin = io::stdin();
 
     let lines = read_lines(stdin.lock());
 
-    let selections = MultiSelect::with_theme(&ColorfulTheme::default())
-        .with_prompt("Pick some items")
+    match MultiSelect::with_theme(&SimpleTheme)
+        .with_prompt(format!("{} {}", "?".red().bold(), "Pick some lines".bold()))
         .report(false)
         .items(&lines)
         .interact_on_opt(&Term::stderr())
-        .unwrap();
-
-    match selections {
+        .unwrap()
+    {
         Some(positions) => {
             for position in positions {
                 println!("{}", lines[position])
             }
         }
         None => (),
-    }
-
-    Ok(())
+    };
 }
