@@ -1,6 +1,7 @@
 # Line Select
 
 [![CI](https://github.com/urbanogilson/lineselect/actions/workflows/rust.yml/badge.svg?branch=main)](https://github.com/urbanogilson/lineselect/actions/workflows/rust.yml)
+[![Crates.io](https://img.shields.io/crates/v/lineselect.svg)](https://crates.io/crates/lineselect)
 [![CI](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/urbanogilson/lineselect/blob/main/LICENSE)
 
 Elevate your command-line pipelines using the Interactive Line Selector – a potent utility enabling interactive line selection from stdin. Seamlessly integrate, pause, select, and refine your pipeline, enhancing data processing precision.
@@ -31,6 +32,12 @@ ls | <b>lineselect</b> | xargs rm
 ![Example](.github/example.gif)
 
 # Installation
+
+## Cargo
+
+```bash
+cargo install lineselect
+```
 
 ## Debian
 
