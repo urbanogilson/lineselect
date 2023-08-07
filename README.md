@@ -29,7 +29,7 @@ Imagine you have a list of files in a directory and you want to selectively remo
 ls | <b>lineselect</b> | xargs rm
 </pre>
 
-![Example](.github/example.gif)
+![Example](https://github.com/urbanogilson/lineselect/blob/main/.github/example.gif)
 
 # Installation
 
