@@ -13,4 +13,4 @@ categories = ["command-line-utilities"]
 [dependencies]
 clap = "4.3.11"
 colored = "2.0.4"
-dialoguer = "0.10.4"
+dialoguer = { path = "./dialoguer" }
