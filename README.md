@@ -42,8 +42,8 @@ cargo install lineselect
 ## Debian
 
 ```bash
-wget https://github.com/urbanogilson/lineselect/releases/download/v0.1.0/lineselect_0.1.0_amd64.deb
-apt install ./lineselect_0.1.0_amd64.deb
+wget https://github.com/urbanogilson/lineselect/releases/download/v0.1.1/lineselect_0.1.1_amd64.deb
+apt install ./lineselect_0.1.1_amd64.deb
 ```
 
 # Contributions
