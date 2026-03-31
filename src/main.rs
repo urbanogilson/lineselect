@@ -1,19 +1,22 @@
 use clap::Command;
-use colored::Colorize;
-use dialoguer::{console::Term, theme::SimpleTheme, MultiSelect};
+use dialoguer::{
+    console::{style, Term},
+    theme::SimpleTheme,
+    MultiSelect,
+};
 use std::io;
 
-fn cmd() -> clap::Command {
+fn cmd() -> Command {
     let name = "lineselect";
 
     Command::new(name)
         .override_usage(format!(
             "<command producing input> | {} | <subsequent command>",
-            name.bold()
+            style(name).bold()
         ))
-        .version("0.1.1")
-        .author("Gilson Urbano <me@gilsonurbano.com>")
-        .about("Select lines")
+        .version(env!("CARGO_PKG_VERSION"))
+        .author(env!("CARGO_PKG_AUTHORS"))
+        .about(env!("CARGO_PKG_DESCRIPTION"))
 }
 
 fn read_lines<R: io::BufRead>(reader: R) -> Vec<String> {
@@ -23,8 +26,8 @@ fn read_lines<R: io::BufRead>(reader: R) -> Vec<String> {
         match line {
             Ok(line) => lines.push(line),
             Err(error) => {
-                eprintln!("Error: {}", error);
-                break;
+                eprintln!("Error reading line: {}", error);
+                continue;
             }
         }
     }
@@ -39,8 +42,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let lines = read_lines(stdin.lock());
 
+    if lines.is_empty() {
+        return Ok(());
+    }
+
     if let Some(positions) = MultiSelect::with_theme(&SimpleTheme)
-        .with_prompt(format!("{} {}", "?".red().bold(), "Pick some lines".bold()))
+        .with_prompt(format!(
+            "{} {}",
+            style("?").red().bold(),
+            style("Pick some lines").bold()
+        ))
         .report(false)
         .items(&lines)
         .interact_on_opt(&Term::stderr())?
@@ -53,21 +64,26 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-#[test]
-fn test_cmd() {
-    cmd().debug_assert();
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[test]
-fn test_read_lines() {
-    use std::io::Cursor;
-    let input = "Line 1\nLine 2\nLine 3\n";
-    let reader = Cursor::new(input);
+    #[test]
+    fn test_cmd() {
+        cmd().debug_assert();
+    }
 
-    let lines = read_lines(reader);
+    #[test]
+    fn test_read_lines() {
+        use std::io::Cursor;
+        let input = "Line 1\nLine 2\nLine 3\n";
+        let reader = Cursor::new(input);
 
-    assert_eq!(lines.len(), 3);
-    assert_eq!(lines[0], "Line 1");
-    assert_eq!(lines[1], "Line 2");
-    assert_eq!(lines[2], "Line 3");
+        let lines = read_lines(reader);
+
+        assert_eq!(lines.len(), 3);
+        assert_eq!(lines[0], "Line 1");
+        assert_eq!(lines[1], "Line 2");
+        assert_eq!(lines[2], "Line 3");
+    }
 }
