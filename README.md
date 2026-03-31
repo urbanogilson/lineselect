@@ -21,6 +21,22 @@ Incorporate the Interactive Line Selector into your pipeline:
 
 Use arrow keys to navigate, press `Space` to select/deselect lines, and press `Enter` to proceed with the selected lines.
 
+## Options
+
+| Option | Short | Description | Default |
+|---|---|---|---|
+| `--prompt <TEXT>` | `-p` | Custom prompt text | `Pick some lines` |
+| `--max-height <N>` | | Maximum number of lines to display at once | (all lines) |
+| `--version` | `-V` | Print version | |
+| `--help` | `-h` | Print help | |
+
+## Exit Codes
+
+| Code | Meaning |
+|---|---|
+| `0` | Lines selected and printed, or empty input |
+| `1` | User cancelled (Esc or Ctrl+C) |
+
 # Example
 
 Imagine you have a list of files in a directory and you want to selectively remove them using `rm`. Instead of using a complex find command, you can utilize the Interactive Line Selector to streamline the process:
@@ -30,6 +46,26 @@ ls | <b>lineselect</b> | xargs rm
 </pre>
 
 ![Example](https://github.com/urbanogilson/lineselect/blob/main/.github/example.gif)
+
+Use a custom prompt to make scripts more descriptive:
+
+```bash
+git branch | lineselect --prompt "Pick branches to delete" | xargs git branch -d
+```
+
+Limit the visible lines when working with large inputs:
+
+```bash
+cat large_file.txt | lineselect --max-height 10 | xargs process
+```
+
+Check the exit code to detect cancellation in scripts:
+
+```bash
+if ! selected=$(ls | lineselect); then
+  echo "Selection cancelled"
+fi
+```
 
 # Installation
 
@@ -56,7 +92,6 @@ This project builds upon the fantastic work of the following projects:
 
 - [Clap](https://github.com/clap-rs/clap) - A full featured, fast Command Line Argument Parser for Rust.
 - [Dialoguer](https://github.com/console-rs/dialoguer) - Rust utility library for nice command line prompts and similar things.
-- [Colored](https://github.com/colored-rs/colored) - Coloring terminal so simple you already know how to do it!
 
 ## Previous Implementation
 
