@@ -69,17 +69,26 @@ fi
 
 # Installation
 
-## Cargo
+## Cargo (Linux, Mac, Windows)
 
 ```bash
 cargo install lineselect
 ```
 
-## Debian
+## Debian / Ubuntu
+
+Download the `.deb` for your architecture from the [latest release](https://github.com/urbanogilson/lineselect/releases/latest) and install it:
 
 ```bash
-wget https://github.com/urbanogilson/lineselect/releases/download/v0.1.1/lineselect_0.1.1_amd64.deb
-apt install ./lineselect_0.1.1_amd64.deb
+apt install ./lineselect_*.deb
+```
+
+## RPM (Fedora / RHEL / openSUSE)
+
+Download the `.rpm` for your architecture from the [latest release](https://github.com/urbanogilson/lineselect/releases/latest) and install it:
+
+```bash
+rpm -i lineselect-*.rpm
 ```
 
 # Contributions

@@ -1,6 +1,6 @@
 [package]
 name = "lineselect"
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 description = "Interactive Line Selector"
 authors = ["Gilson Urbano <hello@gilsonurbano.com>"]
@@ -13,3 +13,16 @@ categories = ["command-line-utilities"]
 [dependencies]
 clap = "4.6.0"
 dialoguer = "0.11.0"
+
+[package.metadata.deb]
+section = "utils"
+assets = [
+  ["target/release/lineselect", "usr/bin/", "755"],
+  ["README.md", "usr/share/doc/lineselect/", "644"],
+]
+
+[package.metadata.generate-rpm]
+assets = [
+  { source = "target/release/lineselect", dest = "/usr/bin/lineselect", mode = "755" },
+  { source = "README.md", dest = "/usr/share/doc/lineselect/README.md", mode = "644" },
+]
