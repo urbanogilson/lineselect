@@ -15,7 +15,7 @@ curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
 Pin a specific version:
 
 ```bash
-LINESELECT_VERSION=0.2.2 curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
+LINESELECT_VERSION=0.2.3 curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
 ```
 
 # Usage
