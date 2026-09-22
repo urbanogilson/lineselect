@@ -6,10 +6,17 @@
 
 Elevate your command-line pipelines using the Interactive Line Selector – a potent utility enabling interactive line selection from stdin. Seamlessly integrate, pause, select, and refine your pipeline, enhancing data processing precision.
 
-# Features
-- Interactive Selection: Pause the pipeline's execution to manually select specific lines from the input stream.
-- Seamless Integration: Easily integrate the Interactive Line Selector into your existing command-line pipelines.
-- Optimized Workflow: Curate data on-the-fly for more accurate and meaningful results.
+# Installation
+
+```bash
+curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
+```
+
+Pin a specific version:
+
+```bash
+LINESELECT_VERSION=0.2.0 curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
+```
 
 # Usage
 
@@ -67,29 +74,10 @@ if ! selected=$(ls | lineselect); then
 fi
 ```
 
-# Installation
-
-## Cargo (Linux, Mac, Windows)
-
-```bash
-cargo install lineselect
-```
-
-## Debian / Ubuntu
-
-Download the `.deb` for your architecture from the [latest release](https://github.com/urbanogilson/lineselect/releases/latest) and install it:
-
-```bash
-apt install ./lineselect_*.deb
-```
-
-## RPM (Fedora / RHEL / openSUSE)
-
-Download the `.rpm` for your architecture from the [latest release](https://github.com/urbanogilson/lineselect/releases/latest) and install it:
-
-```bash
-rpm -i lineselect-*.rpm
-```
+# Features
+- Interactive Selection: Pause the pipeline's execution to manually select specific lines from the input stream.
+- Seamless Integration: Easily integrate the Interactive Line Selector into your existing command-line pipelines.
+- Optimized Workflow: Curate data on-the-fly for more accurate and meaningful results.
 
 # Contributions
 

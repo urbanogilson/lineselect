@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lineselect</title>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.2/dist/bundle/asciinema-player.css">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #6b6b6b;
+    --code-bg: #f4f4f5;
+    --code-fg: #111111;
+    --border: #e2e2e2;
+    --accent: #2563eb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0d0d0d;
+      --fg: #e8e8e8;
+      --muted: #9a9a9a;
+      --code-bg: #1a1a1a;
+      --code-fg: #e8e8e8;
+      --border: #2a2a2a;
+      --accent: #60a5fa;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+  }
+  main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 3rem;
+  }
+  h1 {
+    font-size: 1.75rem;
+    margin: 0 0 0.25rem;
+  }
+  p.tagline {
+    color: var(--muted);
+    margin: 0 0 2rem;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+  }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+  }
+  h3 {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+  }
+  a {
+    color: var(--accent);
+  }
+  ul.features {
+    padding-left: 1.1rem;
+    margin: 0.5rem 0 0;
+  }
+  ul.features li {
+    margin-bottom: 0.4rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  #demo {
+    margin-top: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  footer {
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>lineselect</h1>
+  <p class="tagline">Interactively select lines from stdin, right in your pipelines.</p>
+
+  <div id="demo"></div>
+
+  <h2>Install</h2>
+  <pre><code>curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh</code></pre>
+
+  <h3>Pin a version</h3>
+  <pre><code>LINESELECT_VERSION=0.2.0 curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh</code></pre>
+
+  <h2>Usage</h2>
+  <pre><code>&lt;command producing input&gt; | lineselect | &lt;subsequent command&gt;</code></pre>
+  <p>Use arrow keys to navigate, press <code>Space</code> to select/deselect lines, and press <code>Enter</code> to proceed with the selected lines.</p>
+
+  <pre><code>ls | lineselect | xargs rm</code></pre>
+
+  <h3>Options</h3>
+  <table>
+    <tr><th>Option</th><th>Short</th><th>Description</th><th>Default</th></tr>
+    <tr><td><code>--prompt &lt;TEXT&gt;</code></td><td><code>-p</code></td><td>Custom prompt text</td><td><code>Pick some lines</code></td></tr>
+    <tr><td><code>--max-height &lt;N&gt;</code></td><td></td><td>Maximum number of lines to display at once</td><td>(all lines)</td></tr>
+    <tr><td><code>--version</code></td><td><code>-V</code></td><td>Print version</td><td></td></tr>
+    <tr><td><code>--help</code></td><td><code>-h</code></td><td>Print help</td><td></td></tr>
+  </table>
+
+  <h2>Features</h2>
+  <ul class="features">
+    <li><strong>Interactive selection</strong>: pause the pipeline's execution to manually select specific lines from the input stream.</li>
+    <li><strong>Seamless integration</strong>: drop it into any existing command-line pipeline.</li>
+    <li><strong>Optimized workflow</strong>: curate data on the fly for more accurate results.</li>
+  </ul>
+
+  <footer>
+    <a href="https://github.com/urbanogilson/lineselect">GitHub</a>
+    &middot;
+    <a href="https://crates.io/crates/lineselect">crates.io</a>
+    &middot;
+    <a href="https://github.com/urbanogilson/lineselect#readme">Full README</a>
+  </footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/asciinema-player@3.8.2/dist/bundle/asciinema-player.min.js"></script>
+<script>
+  AsciinemaPlayer.create('example.cast', document.getElementById('demo'), {
+    autoPlay: true,
+    loop: true,
+    theme: 'monokai'
+  });
+</script>
+</body>
+</html>

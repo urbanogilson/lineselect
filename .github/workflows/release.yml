@@ -50,6 +50,15 @@ jobs:
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
 
+      - name: Package binary
+        run: |
+          set -euo pipefail
+          version=$(cargo metadata --no-deps --format-version=1 | jq -r '.packages[0].version')
+          out="lineselect-${version}-${{ matrix.target }}"
+          cp "target/${{ matrix.target }}/release/lineselect" "$out"
+          strip "$out"
+          sha256sum "$out" > "${out}.sha256"
+
       - name: Build .deb package
         if: matrix.deb
         run: |
@@ -70,6 +79,8 @@ jobs:
           files: |
             *.deb
             *.rpm
+            lineselect-*-*-unknown-linux-gnu
+            lineselect-*-*-unknown-linux-gnu.sha256
 
   publish:
     name: Publish to crates.io
