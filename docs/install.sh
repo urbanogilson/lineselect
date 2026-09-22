@@ -5,7 +5,7 @@
 #   curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
 #
 # Pin a specific version:
-#   LINESELECT_VERSION=0.2.0 curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
+#   LINESELECT_VERSION=0.2.1 curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
 #
 # Override the install directory (default: $HOME/.local/bin):
 #   LINESELECT_INSTALL_DIR=/usr/local/bin curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
