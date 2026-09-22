@@ -3,6 +3,7 @@ name: Release
 on:
   release:
     types: [created]
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
@@ -27,6 +28,20 @@ jobs:
             deb: true
             rpm: true
             strip: aarch64-linux-gnu-strip
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            musl: true
+            strip: strip
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-24.04-arm
+            musl: true
+            strip: strip
+          - target: x86_64-apple-darwin
+            os: macos-latest
+            strip: strip
+          - target: aarch64-apple-darwin
+            os: macos-latest
+            strip: strip
 
     steps:
       - uses: actions/checkout@v4
@@ -49,6 +64,12 @@ jobs:
           echo '[target.aarch64-unknown-linux-gnu]' >> .cargo/config.toml
           echo 'linker = "aarch64-linux-gnu-gcc"' >> .cargo/config.toml
 
+      - name: Install musl tools
+        if: matrix.musl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
 
@@ -59,7 +80,7 @@ jobs:
           out="lineselect-${version}-${{ matrix.target }}"
           cp "target/${{ matrix.target }}/release/lineselect" "$out"
           ${{ matrix.strip }} "$out"
-          sha256sum "$out" > "${out}.sha256"
+          shasum -a 256 "$out" > "${out}.sha256"
 
       - name: Build .deb package
         if: matrix.deb
@@ -75,19 +96,32 @@ jobs:
           cargo generate-rpm --target ${{ matrix.target }}
           mv target/${{ matrix.target }}/generate-rpm/*.rpm ./
 
+      - name: Upload workflow artifacts
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lineselect-${{ matrix.target }}
+          path: |
+            *.deb
+            *.rpm
+            lineselect-*-${{ matrix.target }}
+            lineselect-*-${{ matrix.target }}.sha256
+
       - name: Upload artifacts
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           files: |
             *.deb
             *.rpm
-            lineselect-*-*-unknown-linux-gnu
-            lineselect-*-*-unknown-linux-gnu.sha256
+            lineselect-*-${{ matrix.target }}
+            lineselect-*-${{ matrix.target }}.sha256
 
   publish:
     name: Publish to crates.io
     runs-on: ubuntu-latest
     needs: build
+    if: github.event_name == 'release'
     steps:
       - uses: actions/checkout@v4
 

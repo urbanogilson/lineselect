@@ -9,6 +9,9 @@
 #
 # Override the install directory (default: $HOME/.local/bin):
 #   LINESELECT_INSTALL_DIR=/usr/local/bin curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
+#
+# Override the build target (e.g. the static musl build on a glibc system):
+#   LINESELECT_TARGET=x86_64-unknown-linux-musl curl -fsSL https://urbanogilson.github.io/lineselect/install.sh | sh
 
 set -eu
 
@@ -23,29 +26,60 @@ need_cmd() {
     fi
 }
 
-main() {
-    need_cmd curl
-    need_cmd uname
-    need_cmd mktemp
-    need_cmd sha256sum
-    need_cmd install
+is_musl() {
+    for f in /lib/ld-musl-*; do
+        [ -e "$f" ] && return 0
+    done
+    ldd --version 2>&1 | grep -qi musl
+}
 
+detect_target() {
     os="$(uname -s)"
+    arch="$(uname -m)"
+
+    case "$arch" in
+        x86_64|amd64) arch="x86_64" ;;
+        aarch64|arm64) arch="aarch64" ;;
+        *) err "unsupported architecture: $arch (lineselect only ships x86_64 and aarch64 builds)" ;;
+    esac
+
     case "$os" in
-        Linux) ;;
+        Linux)
+            if is_musl; then
+                echo "${arch}-unknown-linux-musl"
+            else
+                echo "${arch}-unknown-linux-gnu"
+            fi
+            ;;
+        Darwin) echo "${arch}-apple-darwin" ;;
         *)
-            err "lineselect's install script only supports Linux (detected: $os).
+            err "lineselect's install script only supports Linux and macOS (detected: $os).
 Try: cargo install lineselect
 Or download a release manually from https://github.com/${REPO}/releases"
             ;;
     esac
+}
 
-    arch="$(uname -m)"
-    case "$arch" in
-        x86_64|amd64) target="x86_64-unknown-linux-gnu" ;;
-        aarch64|arm64) target="aarch64-unknown-linux-gnu" ;;
-        *) err "unsupported architecture: $arch (lineselect only ships x86_64 and aarch64 Linux builds)" ;;
-    esac
+sha256_check() {
+    if command -v sha256sum >/dev/null 2>&1; then
+        sha256sum -c "$1"
+    elif command -v shasum >/dev/null 2>&1; then
+        shasum -a 256 -c "$1"
+    else
+        err "required command 'sha256sum' or 'shasum' not found"
+    fi
+}
+
+main() {
+    need_cmd curl
+    need_cmd uname
+    need_cmd mktemp
+    need_cmd install
+
+    target="${LINESELECT_TARGET:-}"
+    if [ -z "$target" ]; then
+        target="$(detect_target)"
+    fi
 
     version="${LINESELECT_VERSION:-}"
     if [ -n "$version" ]; then
@@ -68,11 +102,11 @@ Or download a release manually from https://github.com/${REPO}/releases"
 
     say "downloading lineselect ${version} (${target})..."
     curl -fsSL -o "${tmpdir}/${asset}" "${base_url}/${asset}" \
-        || err "failed to download ${base_url}/${asset}. Check that version ${version} exists and has Linux assets"
+        || err "failed to download ${base_url}/${asset}. Check that version ${version} exists and has a build for ${target}"
     curl -fsSL -o "${tmpdir}/${asset}.sha256" "${base_url}/${asset}.sha256" \
         || err "failed to download checksum file ${base_url}/${asset}.sha256"
 
-    ( cd "$tmpdir" && sha256sum -c "${asset}.sha256" >/dev/null ) \
+    ( cd "$tmpdir" && sha256_check "${asset}.sha256" >/dev/null ) \
         || err "checksum verification failed for ${asset}, aborting install"
 
     mkdir -p "$install_dir"
