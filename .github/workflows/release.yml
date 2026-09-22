@@ -21,10 +21,12 @@ jobs:
             os: ubuntu-latest
             deb: true
             rpm: true
+            strip: strip
           - target: aarch64-unknown-linux-gnu
             os: ubuntu-latest
             deb: true
             rpm: true
+            strip: aarch64-linux-gnu-strip
 
     steps:
       - uses: actions/checkout@v4
@@ -56,7 +58,7 @@ jobs:
           version=$(cargo metadata --no-deps --format-version=1 | jq -r '.packages[0].version')
           out="lineselect-${version}-${{ matrix.target }}"
           cp "target/${{ matrix.target }}/release/lineselect" "$out"
-          strip "$out"
+          ${{ matrix.strip }} "$out"
           sha256sum "$out" > "${out}.sha256"
 
       - name: Build .deb package
